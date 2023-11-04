@@ -1,15 +1,23 @@
 #include "tracker.hpp"
 
 #include <thread>
+#include <filesystem>
 
 #include <QDebug>
+#include <QBuffer>
 #include <QScreen>
 #include <QPixmap>
 #include <QPainter>
+#include <QFileInfo>
+#include <QSqlQuery>
 #include <QTextStream>
 #include <QApplication>
+#include <QImageWriter>
+#include <QCryptographicHash>
 
 using namespace std::chrono_literals;
+
+constexpr const char *image_format = "PNG";
 
 QPixmap take_screenshot() {
     const QList<QScreen *> screens     = QGuiApplication::screens();
@@ -52,11 +60,95 @@ double compare_images(const QImage &image1, const QImage &image2) {
     return 1.0 - different / total;
 }
 
-tracker::tracker(QObject *parent) : QObject{parent}, timer_{new QTimer{this}} {
-    timer_->setInterval(1s);
+QByteArray image_to_array(const QImage &image) {
+    QByteArray array;
+    QBuffer    buffer{&array};
+    buffer.open(QIODevice::WriteOnly);
 
-    connect(timer_, &QTimer::timeout, this, &tracker::timer_tick);
-    timer_->start();
+    QImageWriter writer{&buffer, image_format};
+    writer.write(image);
+    buffer.close();
+    return array;
+}
+
+QString sha_hash(const QByteArray &array) {
+    QCryptographicHash hash(QCryptographicHash::Sha256);
+    hash.addData(array);
+    QByteArray result = hash.result();
+    return result.toHex();
+}
+
+QString sha_hash(const QImage &image) {
+    if (image.isNull()) {
+        return {};
+    }
+    return sha_hash(image_to_array(image));
+}
+
+// database
+
+database::database(QObject *parent, QString path) : QSqlDatabase{"QSQLITE"} {
+    setDatabaseName(path);
+    if (!open()) {
+        return;
+    }
+
+    exec("CREATE TABLE IF NOT EXISTS screenshots (id INTEGER PRIMARY KEY AUTOINCREMENT, path TEXT, hash TEXT, similarity REAL)");
+}
+
+void database::add(const QString &path, const QString &hash, double similarity) {
+    if (!isOpen()) {
+        return;
+    }
+    QSqlQuery query{*this};
+    query.prepare("INSERT INTO screenshots (path, hash, similarity) VALUES (:path, :hash, :similarity)");
+    query.bindValue(":path", path);
+    query.bindValue(":hash", hash);
+    query.bindValue(":similarity", similarity);
+    query.exec();
+}
+
+std::vector<database::element> database::elements() const {
+    if (!isOpen()) {
+        return {};
+    }
+    std::vector<database::element> result;
+
+    QSqlQuery query{*this};
+    query.exec("SELECT path, hash, similarity FROM screenshots");
+    while (query.next()) {
+        const QString path       = query.value(0).toString();
+        const QString hash       = query.value(1).toString();
+        const double  similarity = query.value(2).toDouble();
+        const bool    checksum   = sha_hash(QImage{path, image_format}) == hash;
+        result.emplace_back(path, hash, similarity, checksum);
+    }
+    return result;
+}
+
+database::element database::last_element() const {
+    if (!isOpen()) {
+        return {};
+    }
+
+    QSqlQuery query{*this};
+    if (!query.exec("SELECT path, hash, similarity FROM screenshots ORDER BY id DESC LIMIT 1") || !query.first()) {
+        return {};
+    }
+    const QString path       = query.value(0).toString();
+    const QString hash       = query.value(1).toString();
+    const double  similarity = query.value(2).toDouble();
+    const bool    checksum   = sha_hash(QImage{path, image_format}) == hash;
+    return {path, hash, similarity, checksum};
+}
+
+// tracker
+
+tracker::tracker(QObject *parent) : QObject{parent}, timer_{this}, db_{this} {
+    timer_.setInterval(1min);
+
+    connect(&timer_, &QTimer::timeout, this, &tracker::timer_tick);
+    timer_.start();
     timer_tick();
 }
 
@@ -67,11 +159,22 @@ void tracker::timer_tick() {
 
 void tracker::compare_and_save(const QImage image) {
     std::scoped_lock<std::mutex> lock{mutex_};
-    if (previous_image_.isNull()) {
-        qInfo("100%");
-    } else {
-        const double result = compare_images(previous_image_, image);
-        qInfo() << Qt::fixed << qSetRealNumberPrecision(2) << (result * 100) << "%";
+
+    const database::element prev = db_.last_element();
+    QImage                  previous_image;
+    if (!prev.path.isEmpty() && QFileInfo::exists(prev.path)) {
+        previous_image.load(prev.path, image_format);
     }
-    previous_image_ = image;
+
+    double result = 1;
+    if (!previous_image.isNull()) {
+        result = compare_images(previous_image, image);
+    }
+
+    const auto    now      = std::chrono::system_clock::now();
+    const auto    current  = std::filesystem::current_path() / "images" / std::format("image-{:%Y%m%d-%H%M%S}.png", now);
+    const QString qcurrent = QString::fromStdString(current.string());
+    image.save(qcurrent, image_format);
+    db_.add(qcurrent, sha_hash(image), result);
+    qInfo() << result << ' ' << qcurrent;
 }

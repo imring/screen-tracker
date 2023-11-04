@@ -4,6 +4,6 @@ project(screen-tracker)
 set(CMAKE_AUTOMOC ON)
 set(QT_VERSION 5)
 
-find_package(Qt${QT_VERSION} REQUIRED COMPONENTS Widgets Gui)
+find_package(Qt${QT_VERSION} REQUIRED COMPONENTS Widgets Gui Sql)
 
 add_subdirectory(src)
