@@ -1,5 +1,6 @@
 add_executable(screen-tracker
     main.cpp
+    tracker.cpp
 )
 
 target_compile_features(screen-tracker PRIVATE cxx_std_20)
