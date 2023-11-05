@@ -1,4 +1,6 @@
 add_executable(screen-tracker
+    compare.cpp
+    database.cpp
     main.cpp
     tracker.cpp
 )
