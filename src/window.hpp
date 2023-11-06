@@ -16,7 +16,7 @@ public:
         return elements_.at(index).path;
     }
     Q_INVOKABLE double similarity(int index) const {
-        return elements_.at(index).similarity;
+        return elements_.at(index).similarity * 100;
     }
     Q_INVOKABLE int length() const {
         return elements_.length();

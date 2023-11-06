@@ -29,7 +29,7 @@ ApplicationWindow {
                     }
                     Text {
                         Layout.alignment: Qt.AlignHCenter
-                        text: "Similarity: " + elements.similarity(index).toFixed(2)
+                        text: "Similarity: " + elements.similarity(index).toFixed(2) + "%"
                     }
                 }
             }
