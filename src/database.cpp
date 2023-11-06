@@ -12,15 +12,15 @@ database::database(QObject *parent, QString path) : QSqlDatabase{"QSQLITE"} {
     exec("CREATE TABLE IF NOT EXISTS screenshots (id INTEGER PRIMARY KEY AUTOINCREMENT, path TEXT, hash TEXT, similarity REAL)");
 }
 
-void database::add(const QString &path, const QString &hash, double similarity) {
+void database::add(const database::element &ele) {
     if (!isOpen()) {
         return;
     }
     QSqlQuery query{*this};
     query.prepare("INSERT INTO screenshots (path, hash, similarity) VALUES (:path, :hash, :similarity)");
-    query.bindValue(":path", path);
-    query.bindValue(":hash", hash);
-    query.bindValue(":similarity", similarity);
+    query.bindValue(":path", ele.path);
+    query.bindValue(":hash", ele.hash);
+    query.bindValue(":similarity", ele.similarity);
     query.exec();
 }
 

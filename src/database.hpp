@@ -14,7 +14,7 @@ public:
         double  similarity = 0;
     };
 
-    void           add(const QString &path, const QString &hash, double similarity);
+    void           add(const element &ele);
     QList<element> elements() const;
     element        last_element() const;
 };

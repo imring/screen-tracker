@@ -1,5 +1,4 @@
 #include "tracker.hpp"
-#include "database.hpp"
 
 #include <filesystem>
 
@@ -14,8 +13,6 @@
 #include <QCryptographicHash>
 
 using namespace std::chrono_literals;
-
-constexpr const char *image_format = "PNG";
 
 QPixmap take_screenshot() {
     const QList<QScreen *> screens     = QGuiApplication::screens();
@@ -44,7 +41,7 @@ QByteArray image_to_array(const QImage &image) {
     QBuffer    buffer{&array};
     buffer.open(QIODevice::WriteOnly);
 
-    QImageWriter writer{&buffer, image_format};
+    QImageWriter writer{&buffer, tracker::image_format};
     writer.write(image);
     buffer.close();
     return array;
@@ -79,7 +76,7 @@ void tracker::timer_tick() {
 
     if (!previous_image.isNull()) {
         compare_worker *worker = new compare_worker{previous_image, image};
-        QThread        *thread = new QThread{this};
+        QThread        *thread = new QThread;
         worker->moveToThread(thread);
 
         connect(thread, &QThread::started, worker, &compare_worker::process);
@@ -109,5 +106,7 @@ void tracker::save(const QImage &image, double similarity) {
     file.close();
 
     database db{this};
-    db.add(qcurrent, sha_hash(array), similarity);
+    database::element ele{qcurrent, sha_hash(array), similarity};
+    db.add(ele);
+    emit on_save(ele);
 }
