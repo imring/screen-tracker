@@ -11,14 +11,14 @@ ApplicationWindow {
     Item {
         anchors.fill: parent
         anchors.margins: 20
+        anchors.rightMargin: 0
 
         GridView {
             anchors.fill: parent
             width: parent.width
             height: parent.height
 
-            cellWidth: 200
-            cellHeight: 0
+            cellWidth: 150 + parent.anchors.margins
 
             model: elements.length()
             delegate: Item {
