@@ -4,27 +4,23 @@
 #include "tracker.hpp"
 #include "database.hpp"
 
+#include <QAbstractListModel>
 #include <QQmlApplicationEngine>
 
-class qml_elements : public QObject {
+class qml_elements : public QAbstractListModel {
     Q_OBJECT
 public:
-    qml_elements(QObject *parent = nullptr) : QObject{parent} {};
-    qml_elements(const QList<database::element> &ele, QObject *parent = nullptr) : elements_{ele}, QObject{parent} {}
+    qml_elements(QObject *parent = nullptr) : QAbstractListModel{parent} {};
+    qml_elements(const QList<database::element> &ele, QObject *parent = nullptr) : elements_{ele}, QAbstractListModel{parent} {}
 
-    Q_INVOKABLE QString path(int index) const {
-        return elements_.at(index).path;
-    }
-    Q_INVOKABLE double similarity(int index) const {
-        return elements_.at(index).similarity * 100;
-    }
-    Q_INVOKABLE int length() const {
-        return elements_.length();
-    }
+    enum MyRoles { PathRole = Qt::UserRole + 1, SimilarityRole };
 
-    void push_front(const database::element &ele) {
-        elements_.push_front(ele);
-    }
+    int                    rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant               data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    bool                   setData(const QModelIndex &index, const QVariant &value, int role) override;
+    QHash<int, QByteArray> roleNames() const override;
+
+    void push_front(const database::element &ele);
 
 private:
     QList<database::element> elements_;
