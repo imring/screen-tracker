@@ -8,7 +8,8 @@ window::window(QWidget *parent) : QQmlApplicationEngine{parent}, tracker_{new tr
     qmlRegisterType<qml_elements>("QMLElements", 1, 0, "QMLElement");
 
     database db{this};
-    elements_ = new qml_elements{db.elements(), this};
+    QList<database::element> ele = db.elements(true);
+    elements_ = new qml_elements{ele, this};
 
     rootContext()->setContextProperty("elements", elements_);
     load(QUrl::fromLocalFile("window.qml"));
@@ -17,6 +18,6 @@ window::window(QWidget *parent) : QQmlApplicationEngine{parent}, tracker_{new tr
 }
 
 void window::display(const database::element &ele) {
-    elements_->push_back(ele);
+    elements_->push_front(ele);
     rootContext()->setContextProperty("elements", elements_);
 }

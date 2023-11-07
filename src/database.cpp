@@ -28,15 +28,16 @@ void database::add(const database::element &ele) {
     }
 }
 
-QList<database::element> database::elements() const {
+QList<database::element> database::elements(bool reverse) const {
     if (!isOpen()) {
         qDebug("The database is not open.");
         return {};
     }
     QList<database::element> result;
 
-    QSqlQuery query{*this};
-    if (!query.exec("SELECT path, hash, similarity FROM screenshots")) {
+    const QString query_str = reverse ? "SELECT path, hash, similarity FROM screenshots ORDER BY id DESC" : "SELECT path, hash, similarity FROM screenshots";
+    QSqlQuery     query{*this};
+    if (!query.exec(query_str)) {
         qDebug("Failed to get elements.");
         return {};
     }

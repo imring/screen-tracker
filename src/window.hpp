@@ -22,8 +22,8 @@ public:
         return elements_.length();
     }
 
-    void push_back(const database::element &ele) {
-        elements_.push_back(ele);
+    void push_front(const database::element &ele) {
+        elements_.push_front(ele);
     }
 
 private:

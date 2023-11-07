@@ -15,7 +15,7 @@ public:
     };
 
     void           add(const element &ele);
-    QList<element> elements() const;
+    QList<element> elements(bool reverse = false) const;
     element        last_element() const;
 };
 
