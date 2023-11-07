@@ -10,9 +10,10 @@ It is a program that takes screenshots of your monitors every minute and saves t
 
 ## Building
 Requirements:
-- Compiler with C++20 support;;
+- Compiler with C++20 support;
 - [CMake 2.20+](https://cmake.org/);
-- [Qt 5](https://www.qt.io/).
+- [Qt 5](https://www.qt.io/);
+- [OpenCV](https://opencv.org/).
 
 ```bash
 cmake . -B build
