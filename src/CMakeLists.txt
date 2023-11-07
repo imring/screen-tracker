@@ -12,4 +12,5 @@ target_link_libraries(screen-tracker PRIVATE
     Qt${QT_VERSION}::Gui
     Qt${QT_VERSION}::Sql
     Qt${QT_VERSION}::Qml
+    QtOct
 )

@@ -6,7 +6,7 @@
 class compare_worker : public QObject {
     Q_OBJECT
 public:
-    compare_worker(QImage previous, QImage current, QObject *parent = nullptr);
+    compare_worker(const QImage &previous, const QImage &current, QObject *parent = nullptr);
 
     void process();
 
