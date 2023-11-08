@@ -1,5 +1,6 @@
 #include "tracker.hpp"
 
+#include <format>
 #include <filesystem>
 
 #include <QThread>
