@@ -20,16 +20,16 @@ ApplicationWindow {
 
             cellWidth: 150 + parent.anchors.margins
 
-            model: elements.length()
+            model: elements
             delegate: Item {
                 ColumnLayout {
                     Image {
-                        source: "file:" + elements.path(index)
+                        source: "file:" + model.path
                         sourceSize.width: 150
                     }
                     Text {
                         Layout.alignment: Qt.AlignHCenter
-                        text: "Similarity: " + elements.similarity(index).toFixed(2) + "%"
+                        text: "Similarity: " + model.similarity.toFixed(2) + "%"
                     }
                 }
             }
