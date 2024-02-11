@@ -3,12 +3,11 @@
 
 #include <QPixmap>
 
-class QImage;
-
-class Screen {
+class ScreenInterface {
 public:
-    static QPixmap Capture();
-    static double Compare(const QImage &left, const QImage &right);
+    virtual ~ScreenInterface()                                                = default;
+    virtual QPixmap Capture()                                        = 0;
+    virtual double  Compare(const QImage &left, const QImage &right) = 0;
 };
 
 #endif // SCREEN_TRACKER_SCREEN_HPP

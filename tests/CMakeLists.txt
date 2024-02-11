@@ -4,7 +4,7 @@ include(FetchContent)
 FetchContent_Declare(
     Catch2
     GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-    GIT_TAG        v3.5.2 # or a later release
+    GIT_TAG        v3.5.2
 )
 FetchContent_MakeAvailable(Catch2)
 
@@ -20,8 +20,15 @@ function(new_test name files)
     catch_discover_tests(${name})
 endfunction()
 
-new_test(compare-tests
-    compare.cpp
-    ../src/screen.cpp
+# compare
+new_test(compare-tests compare.cpp)
+target_link_libraries(compare-tests PRIVATE screen-module)
+
+# database-qt
+new_test(database-qt-tests database_qt.cpp)
+target_link_libraries(database-qt-tests PRIVATE database-module)
+
+add_custom_command(TARGET compare-tests POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_CURRENT_LIST_DIR}/assets $<TARGET_FILE_DIR:compare-tests>/assets
 )
-target_link_libraries(compare-tests PRIVATE Qt${QT_VERSION}::Gui)

@@ -1,4 +1,4 @@
-#include "screen.hpp"
+#include "screen_qt.hpp"
 
 #include <QGuiApplication>
 #include <QScreen>
@@ -8,7 +8,7 @@ double compare_color(int left, int right) {
     return 1 - static_cast<double>(std::abs(left - right)) / 255.0;
 }
 
-QPixmap Screen::Capture() {
+QPixmap ScreenQt::Capture() {
     const QList<QScreen *> screens = QGuiApplication::screens();
     if (screens.size() == 0) {
         return {};
@@ -34,7 +34,7 @@ QPixmap Screen::Capture() {
     return combined;
 }
 
-double Screen::Compare(const QImage &left, const QImage &right) {
+double ScreenQt::Compare(const QImage &left, const QImage &right) {
     double value = 0;
     for (int i = 0; i < left.width(); i++) {
         for (int j = 0; j < left.height(); j++) {
