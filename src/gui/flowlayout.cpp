@@ -48,6 +48,8 @@
 **
 ****************************************************************************/
 
+#include <ranges>
+
 #include <QtWidgets>
 
 #include "flowlayout.h"
@@ -176,7 +178,7 @@ int FlowLayout::doLayout(const QRect &rect, bool testOnly) const
 //! [9]
 
 //! [10]
-    for (QLayoutItem *item : qAsConst(itemList)) {
+    for (QLayoutItem *item : qAsConst(itemList) | std::views::reverse) {
         const QWidget *wid = item->widget();
         int spaceX = horizontalSpacing();
         if (spaceX == -1)

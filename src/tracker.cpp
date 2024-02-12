@@ -54,11 +54,10 @@ void Tracker::Tick() {
     connect(worker_thread, &QThread::finished, worker_thread, &QObject::deleteLater);
 
     connect(worker, &Worker::ResultReady, [this](const QImage &image, double /*similarity*/) {
-        mutex_.lock();
         prev_image_ = image;
-        mutex_.unlock();
     });
     connect(worker, &Worker::ResultReady, this, &Tracker::OnTick);
+    connect(worker, &Worker::ResultReady, worker_thread, &QThread::quit);
 
     worker_thread->start();
 }

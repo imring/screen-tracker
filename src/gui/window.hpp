@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 
+#include "../tracker.hpp"
 #include "flowlayout.h"
 
 class Window : public QMainWindow {
@@ -10,8 +11,15 @@ class Window : public QMainWindow {
 
 public:
     Window(QWidget *parent = nullptr);
+    ~Window();
+
+public slots:
+    void DisplayResult(const QImage &image, double similarity);
 
 private:
+    ScreenInterface *screen_interface_ = nullptr;
+    Tracker         *tracker_          = nullptr;
+
     FlowLayout *flow_layout_ = nullptr;
 };
 

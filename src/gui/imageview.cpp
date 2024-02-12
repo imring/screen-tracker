@@ -12,7 +12,7 @@ ImageView::ImageView(const QImage &image, double similarity, QWidget *parent) : 
     auto *image_label = new QLabel;
     image_label->setPixmap(QPixmap::fromImage(image_scaled));
     image_label->setFixedSize(image_size);
-    image_label->setAlignment(Qt::AlignHCenter);
+    image_label->setAlignment(Qt::AlignCenter);
 
     auto *similarity_label = new QLabel;
     similarity_label->setText(std::format("Similarity: {:.02f}%", similarity * 100).c_str());
