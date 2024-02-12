@@ -14,6 +14,10 @@ target_link_libraries(database-module PUBLIC
 )
 target_link_directories(database-module PUBLIC ${CMAKE_SOURCE_DIR}/src)
 
+add_library(tracker-module tracker.cpp)
+target_compile_features(tracker-module PUBLIC cxx_std_20)
+target_link_libraries(tracker-module PUBLIC screen-module)
+
 add_executable(screen-tracker
     gui/window.cpp
     main.cpp
@@ -23,6 +27,7 @@ target_compile_features(screen-tracker PRIVATE cxx_std_20)
 target_link_libraries(screen-tracker PRIVATE
     screen-module
     database-module
+    tracker-module
 
     Qt${QT_VERSION}::Widgets
 )
