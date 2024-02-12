@@ -31,6 +31,10 @@ void Tracker::SetInterval(int msec) {
     timer_.setInterval(msec);
 }
 
+void Tracker::SetPreviousImage(const QImage &image) {
+    prev_image_ = image;
+}
+
 void Tracker::Start() {
     timer_.start();
 }

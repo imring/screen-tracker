@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include "../tracker.hpp"
+#include "../database.hpp"
 #include "flowlayout.h"
 
 class Window : public QMainWindow {
@@ -13,14 +14,17 @@ public:
     Window(QWidget *parent = nullptr);
     ~Window();
 
-public slots:
-    void DisplayResult(const QImage &image, double similarity);
-
 private:
     ScreenInterface *screen_interface_ = nullptr;
     Tracker         *tracker_          = nullptr;
 
+    DatabaseInterface *database_ = nullptr;
+
     FlowLayout *flow_layout_ = nullptr;
+
+private slots:
+    void DisplayResult(const QImage &image, double similarity);
+    void SaveImage(const QImage &image, double similarity);
 };
 
 #endif // SCREEN_TRACKER_GUI_WINDOW_HPP

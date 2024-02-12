@@ -4,7 +4,7 @@
 
 int main(int argc, char *argv[]) {
     const QApplication app{argc, argv};
-    Window window;
+    Window             window;
 
     window.show();
     return app.exec();

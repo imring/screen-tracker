@@ -3,6 +3,7 @@
 
 #include <QTimer>
 #include <QMutex>
+#include <qimage.h>
 
 #include "screen.hpp"
 
@@ -14,6 +15,8 @@ public:
     Tracker(const QImage &prev_image, ScreenInterface *screen, QObject *parent = nullptr);
 
     void SetInterval(int msec);
+    void SetPreviousImage(const QImage &image);
+
     void Start();
     void Stop();
 
