@@ -40,6 +40,7 @@ Window::Window(QWidget *parent)
 
 Window::~Window() {
     database_->Close();
+    tracker_->Stop();
 
     delete screen_interface_;
     delete database_;
