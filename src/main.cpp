@@ -1,3 +1,11 @@
+#include <QApplication>
+
+#include "gui/window.hpp"
+
 int main(int argc, char *argv[]) {
-    return 0;
+    const QApplication app{argc, argv};
+    Window window;
+
+    window.show();
+    return app.exec();
 }

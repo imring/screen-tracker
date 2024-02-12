@@ -19,6 +19,8 @@ target_compile_features(tracker-module PUBLIC cxx_std_20)
 target_link_libraries(tracker-module PUBLIC screen-module)
 
 add_executable(screen-tracker
+    gui/flowlayout.cpp
+    gui/imageview.cpp
     gui/window.cpp
     main.cpp
 )
