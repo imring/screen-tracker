@@ -28,6 +28,8 @@ public:
 
     virtual bool               AddImage(const QImage &image, double similarity) = 0;
     virtual std::vector<Image> GetAllImages()                                   = 0;
+    virtual std::size_t        GetCount()                                       = 0;
+    virtual Image              At(std::size_t index)                            = 0;
 };
 
 #endif // SCREEN_TRACKER_DATABASE_HPP

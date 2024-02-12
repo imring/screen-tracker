@@ -16,9 +16,11 @@ public:
 
     bool               AddImage(const QImage &image, double similarity) override;
     std::vector<Image> GetAllImages() override;
+    std::size_t        GetCount() override;
+    Image              At(std::size_t index) override;
 
 private:
-    QSqlDatabase database;
+    QSqlDatabase database_;
 };
 
 #endif // SCREEN_TRACKER_DATABASE_QT_HPP

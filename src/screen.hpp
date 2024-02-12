@@ -5,7 +5,7 @@
 
 class ScreenInterface {
 public:
-    virtual ~ScreenInterface()                                                = default;
+    virtual ~ScreenInterface()                                       = default;
     virtual QPixmap Capture()                                        = 0;
     virtual double  Compare(const QImage &left, const QImage &right) = 0;
 };

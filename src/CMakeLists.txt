@@ -32,4 +32,5 @@ target_link_libraries(screen-tracker PRIVATE
     tracker-module
 
     Qt${QT_VERSION}::Widgets
+    Qt${QT_VERSION}::Concurrent
 )

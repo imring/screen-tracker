@@ -15,6 +15,9 @@ public:
     ~Window();
 
 private:
+    void LoadLastImage();
+    void LoadImage(int index);
+
     ScreenInterface *screen_interface_ = nullptr;
     Tracker         *tracker_          = nullptr;
 
@@ -23,7 +26,7 @@ private:
     FlowLayout *flow_layout_ = nullptr;
 
 private slots:
-    void DisplayResult(const QImage &image, double similarity);
+    void DisplayResult(const QImage &image, double similarity, bool back = true);
     void SaveImage(const QImage &image, double similarity);
 };
 

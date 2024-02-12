@@ -10,6 +10,7 @@ find_package(Qt${QT_VERSION} REQUIRED COMPONENTS
     Core
     Widgets
     Sql
+    Concurrent
 )
 
 add_subdirectory(src)
