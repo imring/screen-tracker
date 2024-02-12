@@ -16,6 +16,8 @@ struct Image {
 
     static QByteArray ImageToArray(const QImage &image);
     static QString    HashArray(const QByteArray &array);
+
+    bool operator==(const Image &) const = default;
 };
 
 class DatabaseInterface {

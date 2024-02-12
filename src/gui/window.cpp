@@ -47,7 +47,7 @@ Window::Window(QWidget *parent)
     database_->Open();
     LoadLastImage();
     if (database_->GetCount() > 1) {
-        LoadImage(database_->GetCount() - 2);
+        LoadImage(database_->GetCount() - 1);
     }
 
     // tracker
@@ -71,13 +71,13 @@ void Window::LoadLastImage() {
         return;
     }
 
-    const Image image = database_->At(database_->GetCount() - 1);
+    const Image image = database_->At(database_->GetCount());
     DisplayResult(image.image, image.similarity);
     tracker_->SetPreviousImage(image.image);
 }
 
 void Window::LoadImage(int index) {
-    if (index < 1 || index >= database_->GetCount()) {
+    if (index < 1 || index > database_->GetCount()) {
         unsetCursor();
         return;
     }
