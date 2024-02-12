@@ -1,17 +1,17 @@
 #ifndef SCREEN_TRACKER_TRACKER_HPP
 #define SCREEN_TRACKER_TRACKER_HPP
 
-#include <QTimer>
+#include <QImage>
 #include <QMutex>
-#include <qimage.h>
+#include <QTimer>
 
 #include "screen.hpp"
 
 class Tracker : public QObject {
     Q_OBJECT
 public:
-    Tracker(QObject *parent = nullptr);
-    Tracker(ScreenInterface *screen, QObject *parent = nullptr);
+    explicit Tracker(QObject *parent = nullptr);
+    explicit Tracker(ScreenInterface *screen, QObject *parent = nullptr);
     Tracker(const QImage &prev_image, ScreenInterface *screen, QObject *parent = nullptr);
 
     void SetInterval(int msec);

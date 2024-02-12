@@ -1,0 +1,24 @@
+---
+Checks: >
+  clang-diagnostic-*,
+  clang-analyzer-*,
+  cppcoreguidelines-*,
+  modernize-*,
+  performance-*,
+  readability-*,
+  misc-*,
+  bugprone-*,
+  cert-*,
+  google-*,
+  llvm-*,
+  -cppcoreguidelines-owning-memory,
+  -modernize-use-trailing-return-type,
+  -readability-inconsistent-declaration-parameter-name,
+  -readability-redundant-access-specifiers,
+  -misc-non-private-member-variables-in-classes,
+
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+CheckOptions:
+  readability-identifier-length.MinimumVariableNameLength: 2
+  readability-identifier-length.MinimumParameterNameLength: 2

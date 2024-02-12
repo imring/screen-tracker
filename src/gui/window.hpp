@@ -11,17 +11,20 @@ class Window : public QMainWindow {
     Q_OBJECT
 
 public:
-    Window(QWidget *parent = nullptr);
+    explicit Window(QWidget *parent = nullptr);
+    Window(const Window &)            = delete;
+    Window &operator=(const Window &) = delete;
+    Window(Window &&)                 = delete;
+    Window &operator=(Window &&)      = delete;
     ~Window();
 
 private:
     void LoadLastImage();
-    void LoadImage(int index);
+    void LoadImage(std::size_t index);
 
-    ScreenInterface *screen_interface_ = nullptr;
-    Tracker         *tracker_          = nullptr;
-
-    DatabaseInterface *database_ = nullptr;
+    ScreenInterface   *screen_interface_ = nullptr;
+    Tracker           *tracker_          = nullptr;
+    DatabaseInterface *database_         = nullptr;
 
     FlowLayout *flow_layout_ = nullptr;
 

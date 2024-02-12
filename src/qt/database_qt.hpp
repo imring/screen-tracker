@@ -7,8 +7,12 @@
 
 class DatabaseQt : public DatabaseInterface {
 public:
-    DatabaseQt(std::string_view name = QSqlDatabase::defaultConnection);
-    ~DatabaseQt() override = default;
+    explicit DatabaseQt(std::string_view name = QSqlDatabase::defaultConnection);
+    DatabaseQt(const DatabaseQt &)            = delete;
+    DatabaseQt &operator=(const DatabaseQt &) = delete;
+    DatabaseQt(DatabaseQt &&)                 = delete;
+    DatabaseQt &operator=(DatabaseQt &&)      = delete;
+    ~DatabaseQt() override                    = default;
 
     void SetPath(std::string_view path) override;
     bool Open() override;

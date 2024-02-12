@@ -1,21 +1,25 @@
+#include <QGuiApplication>
+#include <QPainter>
+#include <QScreen>
+
 #include "screen_qt.hpp"
 
-#include <QGuiApplication>
-#include <QScreen>
-#include <QPainter>
+constexpr double max_color    = 255.0;
+constexpr double color_number = 3.0;
 
 double compare_color(int left, int right) {
-    return 1 - static_cast<double>(std::abs(left - right)) / 255.0;
+    return 1 - static_cast<double>(std::abs(left - right)) / max_color;
 }
 
 QPixmap ScreenQt::Capture() {
     const QList<QScreen *> screens = QGuiApplication::screens();
-    if (screens.size() == 0) {
+    if (screens.empty()) {
         return {};
     }
 
     // calc size of all screens
-    int total_width = 0, total_height = 0;
+    int total_width  = 0;
+    int total_height = 0;
     for (QScreen *screen: screens) {
         const QRect geometry = screen->geometry();
         total_width          = qMax(total_width, geometry.right());
@@ -45,7 +49,7 @@ double ScreenQt::Compare(const QImage &left, const QImage &right) {
             const double pixel_diff_red   = compare_color(pixel1.red(), pixel2.red());
             const double pixel_diff_green = compare_color(pixel1.green(), pixel2.green());
             const double pixel_diff_blue  = compare_color(pixel1.blue(), pixel2.blue());
-            value += (pixel_diff_red + pixel_diff_green + pixel_diff_blue) / 3.0;
+            value += (pixel_diff_red + pixel_diff_green + pixel_diff_blue) / color_number;
         }
     }
     return value / (left.width() * left.height());

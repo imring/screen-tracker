@@ -5,6 +5,12 @@
 
 class ScreenInterface {
 public:
+    ScreenInterface()                                   = default;
+    ScreenInterface(const ScreenInterface &)            = delete;
+    ScreenInterface &operator=(const ScreenInterface &) = delete;
+    ScreenInterface(ScreenInterface &&)                 = delete;
+    ScreenInterface &operator=(ScreenInterface &&)      = delete;
+
     virtual ~ScreenInterface()                                       = default;
     virtual QPixmap Capture()                                        = 0;
     virtual double  Compare(const QImage &left, const QImage &right) = 0;

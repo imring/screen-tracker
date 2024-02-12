@@ -3,7 +3,8 @@
 
 #include "imageview.hpp"
 
-const QSize image_size{200, 100};
+const QSize      image_size{200, 100};
+constexpr double to_percentage = 100.0;
 
 ImageView::ImageView(const QImage &image, double similarity, QWidget *parent) : QWidget{parent} {
     auto *layout      = new QVBoxLayout;
@@ -21,7 +22,7 @@ ImageView::ImageView(const QImage &image, double similarity, QWidget *parent) : 
 
     auto *similarity_label = new QLabel;
     if (image_valid) {
-        similarity_label->setText(std::format("Similarity: {:.02f}%", similarity * 100).c_str());
+        similarity_label->setText(std::format("Similarity: {:.02f}%", similarity * to_percentage).c_str());
         similarity_label->setAlignment(Qt::AlignHCenter);
     }
 

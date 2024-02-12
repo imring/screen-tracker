@@ -1,18 +1,18 @@
 #include <QFuture>
-#include <QThread>
 #include <QScrollArea>
+#include <QThread>
 #include <QtConcurrent>
 
-#include "../qt/screen_qt.hpp"
 #include "../qt/database_qt.hpp"
+#include "../qt/screen_qt.hpp"
 
-#include "window.hpp"
 #include "imageview.hpp"
+#include "window.hpp"
 
 class DatabaseSaveWorker : public QObject {
     Q_OBJECT
 public:
-    DatabaseSaveWorker(DatabaseInterface *database = nullptr) : database_{database} {}
+    explicit DatabaseSaveWorker(DatabaseInterface *database = nullptr) : database_{database} {}
 
 public slots:
     void AddImage(const QImage &image, double similarity) {
@@ -76,7 +76,7 @@ void Window::LoadLastImage() {
     tracker_->SetPreviousImage(image.image);
 }
 
-void Window::LoadImage(int index) {
+void Window::LoadImage(std::size_t index) {
     if (index < 1 || index > database_->GetCount()) {
         unsetCursor();
         return;
@@ -106,8 +106,8 @@ void Window::DisplayResult(const QImage &image, double similarity, bool back) {
 }
 
 void Window::SaveImage(const QImage &image, double similarity) {
-    auto    *worker        = new DatabaseSaveWorker{database_};
-    QThread *worker_thread = new QThread;
+    auto *worker        = new DatabaseSaveWorker{database_};
+    auto *worker_thread = new QThread;
     worker->moveToThread(worker_thread);
 
     connect(worker_thread, &QThread::started, [worker, image, similarity]() {

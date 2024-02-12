@@ -1,8 +1,8 @@
-#include <QImage>
-#include <QVariant>
-#include <QSqlQuery>
-#include <QSqlDatabase>
 #include <QCryptographicHash>
+#include <QImage>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QVariant>
 
 #include "database_qt.hpp"
 

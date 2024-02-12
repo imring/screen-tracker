@@ -22,6 +22,12 @@ struct Image {
 
 class DatabaseInterface {
 public:
+    DatabaseInterface()                                     = default;
+    DatabaseInterface(const DatabaseInterface &)            = delete;
+    DatabaseInterface &operator=(const DatabaseInterface &) = delete;
+    DatabaseInterface(DatabaseInterface &&)                 = delete;
+    DatabaseInterface &operator=(DatabaseInterface &&)      = delete;
+
     virtual ~DatabaseInterface() = default;
 
     virtual void SetPath(std::string_view path) = 0;

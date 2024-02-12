@@ -2,6 +2,8 @@
 
 #include "tracker.hpp"
 
+constexpr int default_interval = 5000;
+
 class Worker : public QObject {
     Q_OBJECT
 
@@ -23,7 +25,7 @@ Tracker::Tracker(QObject *parent) : Tracker{nullptr, parent} {}
 Tracker::Tracker(ScreenInterface *screen, QObject *parent) : Tracker{QImage{}, screen, parent} {}
 
 Tracker::Tracker(const QImage &prev_image, ScreenInterface *screen, QObject *parent) : QObject{parent}, prev_image_{prev_image}, screen_{screen} {
-    SetInterval(5000);
+    SetInterval(default_interval);
     connect(&timer_, &QTimer::timeout, this, &Tracker::Tick);
 }
 
@@ -44,8 +46,8 @@ void Tracker::Stop() {
 }
 
 void Tracker::Tick() {
-    Worker  *worker        = new Worker;
-    QThread *worker_thread = new QThread;
+    auto *worker        = new Worker;
+    auto *worker_thread = new QThread;
     worker->moveToThread(worker_thread);
 
     connect(worker_thread, &QThread::started, [this, worker]() {
