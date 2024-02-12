@@ -2,7 +2,7 @@
 
 #include "tracker.hpp"
 
-constexpr int default_interval = 5000;
+constexpr int default_interval = 60 * 1000;
 
 class Worker : public QObject {
     Q_OBJECT

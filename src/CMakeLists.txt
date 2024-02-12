@@ -34,3 +34,7 @@ target_link_libraries(screen-tracker PRIVATE
     Qt${QT_VERSION}::Widgets
     Qt${QT_VERSION}::Concurrent
 )
+    
+if (WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Release")
+    set_property(TARGET screen-tracker PROPERTY WIN32_EXECUTABLE true)
+endif()
