@@ -65,7 +65,7 @@ std::size_t DatabaseQt::GetCount() {
 Image DatabaseQt::At(std::size_t index) {
     QSqlQuery query{database_};
     query.prepare("SELECT image, hash, similarity FROM screens WHERE id = ?;");
-    query.bindValue(0, index);
+    query.bindValue(0, static_cast<int>(index));
     if (!query.exec() || !query.next()) {
         return {};
     }
